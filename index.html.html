@@ -1,0 +1,849 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.hero { background: #FAEEDA; border-radius: 20px; padding: 2.5rem 2rem 2rem; text-align: center; margin-bottom: 1.5rem; border: 2px solid #FAC775; position: relative; overflow: hidden; }
+.hero-deco { position: absolute; inset: 0; pointer-events: none; display: flex; align-items: center; justify-content: center; font-size: 130px; opacity: 0.06; }
+.hero-pill { display: inline-block; background: #FAC775; color: #633806; border-radius: 20px; padding: 4px 16px; font-size: 12px; font-weight: 500; margin-bottom: 12px; }
+.hero h1 { font-size: 34px; font-weight: 500; color: #412402; line-height: 1.1; margin-bottom: 8px; }
+.hero p { font-size: 14px; color: #633806; }
+.hero-tags { display: flex; justify-content: center; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.hero-tag { border-radius: 14px; padding: 5px 14px; font-size: 12px; font-weight: 500; }
+.tag-pink { background: #FBEAF0; color: #72243E; border: 1px solid #ED93B1; }
+.tag-mint { background: #E1F5EE; color: #085041; border: 1px solid #5DCAA5; }
+.tag-lav  { background: #EEEDFE; color: #3C3489; border: 1px solid #AFA9EC; }
+.nav { display: flex; gap: 8px; justify-content: center; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.nav-btn { border-radius: 20px; padding: 8px 18px; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 500; transition: all 0.15s; border: 1.5px solid transparent; }
+.nav-btn.nb-sun  { background: #FAEEDA; color: #633806; border-color: #FAC775; }
+.nav-btn.nb-sky  { background: #E6F1FB; color: #0C447C; border-color: #85B7EB; }
+.nav-btn.nb-mint { background: #E1F5EE; color: #085041; border-color: #5DCAA5; }
+.nav-btn.nb-pink { background: #FBEAF0; color: #72243E; border-color: #ED93B1; }
+.nav-btn.active.nb-sun  { background: #FAC775; color: #412402; border-color: #EF9F27; }
+.nav-btn.active.nb-sky  { background: #85B7EB; color: #042C53; border-color: #378ADD; }
+.nav-btn.active.nb-mint { background: #5DCAA5; color: #04342C; border-color: #1D9E75; }
+.nav-btn.active.nb-pink { background: #ED93B1; color: #4B1528; border-color: #D4537E; }
+.section { display: none; }
+.section.active { display: block; }
+.card { background: var(--color-background-primary); border-radius: 16px; padding: 1.25rem; margin-bottom: 1rem; border: 0.5px solid var(--color-border-tertiary); }
+.card-sun  { background: #FAEEDA; border: 1.5px solid #FAC775; }
+.card-sky  { background: #E6F1FB; border: 1.5px solid #85B7EB; }
+.card-mint { background: #E1F5EE; border: 1.5px solid #5DCAA5; }
+.card-pink { background: #FBEAF0; border: 1.5px solid #ED93B1; }
+.card-lav  { background: #EEEDFE; border: 1.5px solid #AFA9EC; }
+.card h2 { font-size: 15px; font-weight: 500; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+.card h3 { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+.card-sun h2  { color: #412402; }
+.card-sky h2  { color: #042C53; }
+.card-mint h2 { color: #04342C; }
+.card-pink h2 { color: #4B1528; }
+.card-lav h2  { color: #26215C; }
+.how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 1.2rem; }
+.how-card { border-radius: 14px; padding: 1.1rem; text-align: center; }
+.how-card .num { display: inline-flex; width: 28px; height: 28px; border-radius: 50%; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; margin-bottom: 10px; }
+.how-card h3 { font-size: 13px; font-weight: 500; margin-bottom: 5px; }
+.how-card p  { font-size: 12px; line-height: 1.5; }
+.hc-pink { background: #FBEAF0; }
+.hc-pink .num { background: #ED93B1; color: #4B1528; }
+.hc-pink h3, .hc-pink p { color: #72243E; }
+.hc-lav  { background: #EEEDFE; }
+.hc-lav  .num { background: #AFA9EC; color: #26215C; }
+.hc-lav  h3, .hc-lav p { color: #3C3489; }
+.hc-mint { background: #E1F5EE; }
+.hc-mint .num { background: #5DCAA5; color: #04342C; }
+.hc-mint h3, .hc-mint p { color: #085041; }
+.challenge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 1.2rem; }
+.ch-card { border-radius: 14px; padding: 1rem; cursor: pointer; transition: all 0.15s; border: 2px solid transparent; }
+.ch-card:hover { filter: brightness(0.96); }
+.ch-team  { background: #E6F1FB; }
+.ch-team.selected  { border-color: #378ADD; }
+.ch-team  h3, .ch-team  p { color: #0C447C; }
+.ch-solo  { background: #FBEAF0; }
+.ch-solo.selected  { border-color: #D4537E; }
+.ch-solo  h3, .ch-solo  p { color: #72243E; }
+.ch-steps { background: #EAF3DE; }
+.ch-steps.selected { border-color: #639922; }
+.ch-steps h3, .ch-steps p { color: #27500A; }
+.ch-card .icon { font-size: 26px; margin-bottom: 8px; }
+.ch-card h3 { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+.ch-card p  { font-size: 12px; line-height: 1.4; }
+.form-row { margin-bottom: 1rem; }
+.form-row label { display: block; font-size: 13px; color: var(--color-text-secondary); margin-bottom: 5px; }
+.form-row input, .form-row select { width: 100%; padding: 10px 12px; border: 0.5px solid var(--color-border-secondary); border-radius: 10px; background: var(--color-background-primary); color: var(--color-text-primary); font-size: 14px; }
+.submit-btn { border-radius: 12px; padding: 12px 24px; font-size: 15px; cursor: pointer; width: 100%; font-weight: 500; transition: all 0.15s; border: none; }
+.btn-sun  { background: #FAC775; color: #412402; }
+.btn-sun:hover  { background: #EF9F27; }
+.btn-mint { background: #5DCAA5; color: #04342C; }
+.btn-mint:hover { background: #1D9E75; }
+.submit-btn:active { transform: scale(0.98); }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-bottom: 1rem; }
+.stat-card { border-radius: 14px; padding: 1rem; }
+.sc-sun  { background: #FAEEDA; }
+.sc-sky  { background: #E6F1FB; }
+.sc-mint { background: #E1F5EE; }
+.stat-label { font-size: 11px; margin-bottom: 4px; }
+.sc-sun  .stat-label { color: #633806; }
+.sc-sky  .stat-label { color: #0C447C; }
+.sc-mint .stat-label { color: #085041; }
+.stat-val { font-size: 22px; font-weight: 500; }
+.sc-sun  .stat-val { color: #412402; }
+.sc-sky  .stat-val { color: #042C53; }
+.sc-mint .stat-val { color: #04342C; }
+.tabs { display: flex; gap: 4px; background: #FAEEDA; border-radius: 12px; padding: 4px; margin-bottom: 1rem; }
+.tab { flex: 1; text-align: center; padding: 8px; font-size: 13px; cursor: pointer; border-radius: 8px; color: #633806; transition: all 0.15s; font-weight: 500; }
+.tab.active { background: #FAC775; color: #412402; }
+.lb-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #FAC775; }
+.lb-item:last-child { border-bottom: none; }
+.rank { font-size: 20px; width: 34px; text-align: center; }
+.avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 13px; flex-shrink: 0; }
+.av-pink { background: #FBEAF0; color: #72243E; }
+.av-mint { background: #E1F5EE; color: #085041; }
+.av-sky  { background: #E6F1FB; color: #0C447C; }
+.av-lav  { background: #EEEDFE; color: #3C3489; }
+.av-lime { background: #EAF3DE; color: #27500A; }
+.lb-info { flex: 1; min-width: 0; }
+.lb-name { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+.lb-sub  { font-size: 12px; color: var(--color-text-secondary); }
+.pb-wrap { background: #FAC775; border-radius: 6px; height: 6px; margin-top: 5px; overflow: hidden; }
+.pb-fill { height: 6px; border-radius: 6px; }
+.pb-pink { background: #ED93B1; }
+.pb-mint { background: #5DCAA5; }
+.pb-sky  { background: #85B7EB; }
+.pb-lav  { background: #AFA9EC; }
+.pb-lime { background: #97C459; }
+.lb-right { text-align: right; flex-shrink: 0; }
+.lb-steps { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+.lb-pct   { font-size: 11px; color: var(--color-text-secondary); }
+.badge { display: inline-flex; align-items: center; font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 500; margin-left: 5px; }
+.bdg-sun  { background: #FAC775; color: #412402; }
+.bdg-mint { background: #5DCAA5; color: #04342C; }
+.confetti-wrap { position: fixed; top: 0; left: 0; right: 0; pointer-events: none; z-index: 100; height: 100vh; overflow: hidden; }
+.cp { position: absolute; width: 10px; height: 10px; opacity: 0; border-radius: 2px; animation: cffall 3s ease-in forwards; }
+@keyframes cffall { 0% { transform: translateY(-20px) rotate(0); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+.success-box { border-radius: 16px; padding: 1.5rem; text-align: center; display: none; margin-top: 1rem; }
+.success-box.show { display: block; animation: spop 0.4s ease; }
+@keyframes spop { 0% { transform: scale(0.9); opacity: 0; } 60% { transform: scale(1.04); } 100% { transform: scale(1); opacity: 1; } }
+.success-box .big-icon { font-size: 44px; margin-bottom: 8px; }
+.sbox-mint { background: #E1F5EE; border: 1.5px solid #5DCAA5; }
+.sbox-mint h3 { color: #04342C; font-size: 16px; font-weight: 500; margin-bottom: 4px; }
+.sbox-mint p  { color: #085041; font-size: 13px; }
+.step-row { display: flex; gap: 12px; font-size: 13px; align-items: flex-start; margin-bottom: 10px; }
+.step-num { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; margin-top: 1px; }
+.step-txt { color: var(--color-text-secondary); line-height: 1.6; }
+.act-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-bottom: 1.2rem; }
+.act-pill { padding: 9px 10px; border-radius: 10px; font-size: 12px; }
+.ap-sun  { background: #FAEEDA; color: #633806; }
+.ap-sky  { background: #E6F1FB; color: #0C447C; }
+.ap-pink { background: #FBEAF0; color: #72243E; }
+.ap-mint { background: #E1F5EE; color: #085041; }
+.ap-lav  { background: #EEEDFE; color: #3C3489; }
+.ap-lime { background: #EAF3DE; color: #27500A; }
+.ext-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; padding: 9px 16px; border-radius: 10px; text-decoration: none; background: #E6F1FB; color: #0C447C; border: 1px solid #85B7EB; transition: all 0.15s; }
+.ext-link:hover { background: #B5D4F4; }
+.faq-item { margin-bottom: 1rem; }
+.faq-q { font-size: 13px; font-weight: 500; color: #412402; margin-bottom: 4px; display: flex; gap: 8px; align-items: flex-start; }
+.faq-a { font-size: 13px; color: #633806; line-height: 1.6; padding-left: 20px; }
+.faq-dot { color: #FAC775; font-size: 16px; flex-shrink: 0; margin-top: -1px; }
+.prize-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; margin-bottom: 8px; font-size: 13px; font-weight: 500; }
+.pr-sun  { background: #FAEEDA; color: #633806; }
+.pr-pink { background: #FBEAF0; color: #72243E; }
+.pr-mint { background: #E1F5EE; color: #085041; }
+.pr-lav  { background: #EEEDFE; color: #3C3489; }
+.converted-hint { font-size: 13px; color: #085041; min-height: 20px; margin-bottom: 1rem; font-weight: 500; }
+.divider { border: none; border-top: 1px solid #FAC775; margin: 1rem 0; }
+
+.hero-float {
+  position: absolute;
+  font-size: 28px;
+  animation: floaty 4s ease-in-out infinite;
+  opacity: 0.95;
+  z-index: 2;
+}
+
+.float-1 { top: 16px; left: 24px; animation-delay: 0s; }
+.float-2 { top: 20px; right: 30px; animation-delay: 1s; }
+.float-3 { bottom: 20px; left: 55px; animation-delay: 2s; }
+.float-4 { bottom: 16px; right: 70px; animation-delay: 3s; }
+
+@keyframes floaty {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(8deg); }
+}
+
+body {
+  background:
+    radial-gradient(circle at top left, rgba(250,199,117,0.18), transparent 30%),
+    radial-gradient(circle at top right, rgba(237,147,177,0.16), transparent 30%),
+    radial-gradient(circle at bottom left, rgba(133,183,235,0.14), transparent 30%),
+    #fffdf9;
+}
+
+.card {
+  background: var(--color-background-primary);
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  border: 0.5px solid var(--color-border-tertiary);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+}
+
+.submit-btn {
+  border-radius: 14px;
+  padding: 12px 24px;
+  font-size: 15px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: 600;
+  transition: all 0.15s ease;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.submit-btn:active {
+  transform: scale(0.97);
+}
+
+.summer-banner {
+  background: linear-gradient(90deg, #FAC775, #ED93B1, #85B7EB);
+  color: white;
+  padding: 10px;
+  border-radius: 14px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+
+.sparkle {
+  display: inline-block;
+  animation: sparkleSpin 2.5s ease-in-out infinite;
+}
+
+@keyframes sparkleSpin {
+  0%,100% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(10deg) scale(1.15); }
+}
+
+</style>
+
+<div id="confetti-wrap" class="confetti-wrap"></div>
+
+
+<div class="summer-banner">
+  🌞 Stay active • 💖 Have fun • 🏆 Win prizes • 🍉 Enjoy summer
+</div>
+
+<div class="hero">
+  <div class="hero-deco">☀️</div>
+
+  <div class="hero-float float-1">🌴</div>
+  <div class="hero-float float-2">☀️</div>
+  <div class="hero-float float-3">🦩</div>
+  <div class="hero-float float-4">🍉</div>
+
+  <div class="hero-pill">June 1 – August 23, 2026</div>
+  <h1><span class="sparkle">✨</span> Summer Movement<br>Challenge</h1>
+  <p>A staff wellness initiative by the Staff Engagement Committee</p>
+  <div class="hero-tags">
+    <span class="hero-tag tag-pink">👥 Team challenge</span>
+    <span class="hero-tag tag-mint">🏃 Solo challenge</span>
+    <span class="hero-tag tag-lav">👟 10K-a-day streak</span>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn nb-sun active" onclick="showSection('about')" id="nav-about"><i class="ti ti-sun" aria-hidden="true"></i> About</button>
+  <button class="nav-btn nb-pink" onclick="showSection('register')" id="nav-register"><i class="ti ti-user-plus" aria-hidden="true"></i> Join up</button>
+  <button class="nav-btn nb-mint" onclick="showSection('log')" id="nav-log"><i class="ti ti-shoe" aria-hidden="true"></i> Log steps</button>
+  <button class="nav-btn nb-sky" onclick="showSection('leaderboard')" id="nav-leaderboard"><i class="ti ti-trophy" aria-hidden="true"></i> Leaderboard</button>
+</div>
+
+<div id="section-about" class="section active">
+  <div class="card card-sun">
+    <h2><i class="ti ti-sun" aria-hidden="true"></i> ✨ What is the Summer Movement Challenge?</h2>
+    <p style="font-size:14px; color:#633806; line-height:1.7; margin-bottom:1rem;">The Summer Movement Challenge is a fun, staff-wide wellness initiative running from <strong style="color:#412402;">June 1 to August 23, 2026</strong>. All movement counts — not just walking! Cycling, swimming, yoga, kayaking, hiking, and fitness classes all convert to steps so everyone can join in no matter how they like to move.</p>
+    <p style="font-size:14px; color:#633806; line-height:1.7;">You can join one, two, or all three challenges — as an individual, part of a team, or both at once.</p>
+  </div>
+
+  <div class="card card-sky">
+    <h2 style="color:#042C53;"><i class="ti ti-list-check" aria-hidden="true"></i> 🌈 3 ways to participate</h2>
+    <div class="how-grid">
+      <div class="how-card hc-pink">
+        <div class="num">1</div>
+        <h3>Team distance</h3>
+        <p>Form a team of up to 5 and combine your steps. Top 2 teams win a prize.</p>
+      </div>
+      <div class="how-card hc-lav">
+        <div class="num">2</div>
+        <h3>Solo distance</h3>
+        <p>Go it alone and rack up as many steps as you can. Top 3 individuals win.</p>
+      </div>
+      <div class="how-card hc-mint">
+        <div class="num">3</div>
+        <h3>10K-a-day streak</h3>
+        <p>Hit 10,000 steps every day. The person with the longest unbroken streak wins.</p>
+      </div>
+    </div>
+    <hr class="divider" style="border-color:#85B7EB;">
+    <h3 style="font-size:13px; font-weight:500; color:#042C53; margin-bottom:10px;">How to get started</h3>
+    <div class="step-row"><div class="step-num" style="background:#85B7EB; color:#042C53;">1</div><div class="step-txt">Register below — enter your name, optional team name, and pick your challenges.</div></div>
+    <div class="step-row"><div class="step-num" style="background:#85B7EB; color:#042C53;">2</div><div class="step-txt">Track your movement each day and convert any activity to steps using the converter or the reference chart.</div></div>
+    <div class="step-row" style="margin-bottom:0;"><div class="step-num" style="background:#85B7EB; color:#042C53;">3</div><div class="step-txt">Submit your results every two weeks. Remember to convert activities before submitting!</div></div>
+  </div>
+
+  <div class="card card-mint">
+    <h2><i class="ti ti-exchange" aria-hidden="true"></i> Converting activities to steps</h2>
+    <p style="font-size:13px; color:#085041; line-height:1.6; margin-bottom:1rem;">All movement counts! Use the quick reference below or visit the full chart for dozens of activities.</p>
+    <div class="act-grid">
+      <div class="act-pill ap-sun">🚴 Cycling: 150 steps/min</div>
+      <div class="act-pill ap-sky">🏊 Swimming: 200 steps/min</div>
+      <div class="act-pill ap-pink">🧘 Yoga: 80 steps/min</div>
+      <div class="act-pill ap-lav">🚣 Kayaking: 120 steps/min</div>
+      <div class="act-pill ap-lime">🥾 Hiking: 130 steps/min</div>
+      <div class="act-pill ap-mint">🚶 Walking: 100 steps/min</div>
+    </div>
+    <a href="https://www.bigteamchallenge.com/resources/activity-conversion-chart" target="_blank" class="ext-link">
+      <i class="ti ti-external-link" aria-hidden="true"></i> Full activity conversion chart
+    </a>
+  </div>
+
+  <div class="card card-lav">
+    <h2 style="color:#26215C;"><i class="ti ti-gift" aria-hidden="true"></i> 🏆 Prizes</h2>
+    <div class="prize-row pr-sun">🏆 Top 2 teams win a prize</div>
+    <div class="prize-row pr-pink">🏅 Top 3 solo individuals win a prize</div>
+    <div class="prize-row pr-mint">🎯 The person with the longest 10K-a-day streak wins</div>
+    <div class="prize-row pr-lav">🎁 One midway surprise giveaway during the summer</div>
+  </div>
+
+  <div class="card card-sun">
+    <h2><i class="ti ti-help-circle" aria-hidden="true"></i> FAQ</h2>
+    <div class="faq-item">
+      <div class="faq-q"><span class="faq-dot">&#9679;</span> Do all activities count?</div>
+      <div class="faq-a">Yes — all movement counts! Cycling, swimming, yoga, kayaking, and fitness classes all convert to steps.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span class="faq-dot">&#9679;</span> Can I join more than one challenge?</div>
+      <div class="faq-a">Absolutely — you can join as an individual, a team member, or both, and you can sign up for all three challenges.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span class="faq-dot">&#9679;</span> How do teams work?</div>
+      <div class="faq-a">Teams can include up to 5 participants. Pick a fun team name and work together to accumulate steps. The top 2 teams win a prize.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span class="faq-dot">&#9679;</span> How does the streak challenge work?</div>
+      <div class="faq-a">Hit 10,000 steps every day without missing one. The person with the longest unbroken streak at the end of the challenge wins.</div>
+    </div>
+    <div class="faq-item" style="margin-bottom:0;">
+      <div class="faq-q"><span class="faq-dot">&#9679;</span> How do I track my progress?</div>
+      <div class="faq-a">Record your steps here and submit every two weeks. Remember to convert any activity to steps first.</div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-bottom:1.5rem;">
+    <button class="submit-btn btn-sun" style="max-width:260px;" onclick="showSection('register')">
+      <i class="ti ti-user-plus" aria-hidden="true"></i> 🎉 Ready? 💖 Sign me up!
+    </button>
+  </div>
+</div>
+
+<div id="section-register" class="section">
+  <div class="card card-pink">
+    <h2><i class="ti ti-user-plus" aria-hidden="true"></i> Register for the challenge</h2>
+    <div class="form-row">
+      <label>Your name</label>
+      <input type="text" id="reg-name" placeholder="e.g. Alex Chen" />
+    </div>
+    <div class="form-row">
+      <label>Team name (optional — max 5 people)</label>
+      <input type="text" id="reg-team" placeholder="e.g. The Mighty Movers" />
+    </div>
+    <div class="form-row">
+      <label>Email (for prize notifications)</label>
+      <input type="email" id="reg-email" placeholder="you@work.ca" />
+    </div>
+    <p style="font-size:13px; color:#72243E; margin-bottom:1rem;">Select your challenges — you can join all three!</p>
+    <div class="challenge-grid">
+      <div class="ch-card ch-team" id="c-team" onclick="toggleChallenge('team')">
+        <div class="icon">👥</div>
+        <h3>Team distance</h3>
+        <p>Up to 5 people — top 2 teams win</p>
+      </div>
+      <div class="ch-card ch-solo" id="c-solo" onclick="toggleChallenge('solo')">
+        <div class="icon">🏃</div>
+        <h3>Solo distance</h3>
+        <p>Top 3 individuals win a prize</p>
+      </div>
+      <div class="ch-card ch-steps" id="c-steps" onclick="toggleChallenge('steps')">
+        <div class="icon">👟</div>
+        <h3>10K-a-day streak</h3>
+        <p>Longest unbroken streak wins</p>
+      </div>
+    </div>
+    <button class="submit-btn" style="background:#ED93B1; color:#4B1528;" onclick="register()">
+      <i class="ti ti-check" aria-hidden="true"></i> 💖 Sign me up!
+    </button>
+    <div class="success-box sbox-mint" id="reg-success">
+      <div class="big-icon">🎉</div>
+      <h3>You're in! Welcome to the challenge!</h3>
+      <p>Head to "Log steps" to start tracking your movement.</p>
+    </div>
+  </div>
+</div>
+
+<div id="section-log" class="section">
+  <div class="card card-mint">
+    <h2><i class="ti ti-shoe" aria-hidden="true"></i> Log your activity</h2>
+    <div class="form-row">
+      <label>Your name</label>
+      <input type="text" id="log-name" placeholder="e.g. Alex Chen" />
+    </div>
+    <div class="form-row">
+      <label>Activity type</label>
+      <select id="log-activity">
+        <option value="walking">Walking / running</option>
+        <option value="cycling">Cycling</option>
+        <option value="swimming">Swimming</option>
+        <option value="yoga">Yoga / fitness class</option>
+        <option value="kayaking">Kayaking / paddling</option>
+        <option value="hiking">Hiking</option>
+        <option value="steps">Already counted as steps</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Duration (minutes) or steps if already counted</label>
+      <input type="number" id="log-amount" placeholder="e.g. 45" />
+    </div>
+    <div class="form-row">
+      <label>Date</label>
+      <input type="date" id="log-date" />
+    </div>
+    <p class="converted-hint" id="converted-steps"></p>
+    <button class="submit-btn btn-mint" onclick="logSteps()">
+      <i class="ti ti-plus" aria-hidden="true"></i> 👟 Submit steps
+    </button>
+    <div class="success-box sbox-mint" id="log-success">
+      <div class="big-icon">🔥</div>
+      <h3 id="log-success-msg">Steps logged!</h3>
+      <p id="log-success-sub">Keep moving — every step counts!</p>
+    </div>
+  </div>
+  <div class="card card-sky">
+    <h2 style="color:#042C53;"><i class="ti ti-exchange" aria-hidden="true"></i> Need help converting?</h2>
+    <p style="font-size:13px; color:#0C447C; margin-bottom:1rem;">The activity selector above auto-converts for you. For less common activities, check the full chart.</p>
+    <a href="https://www.bigteamchallenge.com/resources/activity-conversion-chart" target="_blank" class="ext-link">
+      <i class="ti ti-external-link" aria-hidden="true"></i> Full activity conversion chart
+    </a>
+  </div>
+</div>
+
+<div id="section-leaderboard" class="section">
+  <div class="stats-grid">
+    <div class="stat-card sc-sun">
+      <div class="stat-label"><i class="ti ti-users" aria-hidden="true"></i> Participants</div>
+      <div class="stat-val">47</div>
+    </div>
+    <div class="stat-card sc-sky">
+      <div class="stat-label"><i class="ti ti-shoe" aria-hidden="true"></i> Total steps</div>
+      <div class="stat-val">2.1M</div>
+    </div>
+    <div class="stat-card sc-mint">
+      <div class="stat-label"><i class="ti ti-calendar" aria-hidden="true"></i> Days left</div>
+      <div class="stat-val">88</div>
+    </div>
+  </div>
+
+  <div class="card card-sun">
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('individual')" id="tab-individual">Individual</div>
+      <div class="tab" onclick="switchTab('team')" id="tab-team">Teams</div>
+      <div class="tab" onclick="switchTab('streak')" id="tab-streak">Streak</div>
+    </div>
+
+    <div id="lb-individual">
+      <div class="lb-item">
+        <div class="rank" style="font-size:22px;">🥇</div>
+        <div class="avatar av-pink">🦄</div>
+        <div class="lb-info">
+          <div class="lb-name">Sarah R. <span class="badge bdg-sun">Leading!</span></div>
+          <div class="lb-sub">Team: Mighty Movers</div>
+          <div class="pb-wrap"><div class="pb-fill pb-pink" style="width:94%"></div></div>
+        </div>
+        <div class="lb-right"><div class="lb-steps">284,210</div><div class="lb-pct">steps</div></div>
+      </div>
+      <div class="lb-item">
+        <div class="rank">🥈</div>
+        <div class="avatar av-mint">🌈</div>
+        <div class="lb-info">
+          <div class="lb-name">Marcus K.</div>
+          <div class="lb-sub">Solo participant</div>
+          <div class="pb-wrap"><div class="pb-fill pb-mint" style="width:81%"></div></div>
+        </div>
+        <div class="lb-right"><div class="lb-steps">243,780</div><div class="lb-pct">steps</div></div>
+      </div>
+      <div class="lb-item">
+        <div class="rank">🥉</div>
+        <div class="avatar av-sky">🌻</div>
+        <div class="lb-info">
+          <div class="lb-name">Jamie P.</div>
+          <div class="lb-sub">Team: Sun Steppers</div>
+          <div class="pb-wrap"><div class="pb-fill pb-sky" style="width:74%"></div></div>
+        </div>
+        <div class="lb-right"><div class="lb-steps">221,450</div><div class="lb-pct">steps</div></div>
+      </div>
+      <div class="lb-item">
+        <div class="rank" style="font-size:14px; color:var(--color-text-secondary);">4</div>
+        <div class="avatar av-lav">🦋</div>
+        <div class="lb-info">
+          <div class="lb-name">Tina L.</div>
+          <div class="lb-sub">Team: Mighty Movers</div>
+          <div class="pb-wrap"><div class="pb-fill pb-lav" style="width:61%"></div></div>
+        </div>
+        <div class="lb-right"><div class="lb-steps">183,200</div><div class="lb-pct">steps</div></div>
+      </div>
+      <div class="lb-item">
+        <div class="rank" style="font-size:14px; color:var(--color-text-secondary);">5</div>
+        <div class="avatar av-lime">🍓</div>
+        <div class="lb-info">
+          <div class="lb-name">Dev A.</div>
+          <div class="lb-sub">Solo participant</div>
+          <div class="pb-wrap"><div class="pb-fill pb-lime" style="width:52%"></div></div>
+        </div>
+        <div class="lb-right"><div class="lb-steps">155,900</div><div class="lb-pct">steps</div></div>
+      </div>
+    </div>
+
+    <div id="lb-team" style="display:none;">
+      <div class="lb-item">
+        <div class="rank" style="font-size:22px;">🥇</div>
+        <div class="avatar av-pink" style="border-radius:10px;">🔥</div>
+        <div class="lb-info">
+          <div class="lb-name">Mighty Movers <span class="badge bdg-sun">1st!</span></div>
+          <div class="lb-sub">5 members</div>
+          <div class="pb-wrap"><div class="pb-fill pb-pink" style="width:89%"></div></div>
+        </div>
+        <div class="lb-right"><div class="lb-steps">1.2M</div><div class="lb-pct">steps</div></div>
+      </div>
+      <div class="lb-item">
+        <div class="rank">🥈</div>
+        <div class="avatar av-mint" style="border-radius:10px;">☀️</div>
+        <div class="lb-info">
+          <div class="lb-name">Sun Steppers</div>
+          <div class="lb-sub">4 members</div>
+          <div class="pb-wrap"><div class="pb-fill pb-mint" style="width:72%"></div></div>
+        </div>
+        <div class="lb-right"><div class="lb-steps">980K</div><div class="lb-pct">steps</div></div>
+      </div>
+      <div class="lb-item">
+        <div class="rank" style="font-size:14px; color:var(--color-text-secondary);">3</div>
+        <div class="avatar av-sky" style="border-radius:10px;">⛰️</div>
+        <div class="lb-info">
+          <div class="lb-name">Peak Performers</div>
+          <div class="lb-sub">3 members</div>
+          <div class="pb-wrap"><div class="pb-fill pb-sky" style="width:58%"></div></div>
+        </div>
+        <div class="lb-right"><div class="lb-steps">786K</div><div class="lb-pct">steps</div></div>
+      </div>
+    </div>
+
+    <div id="lb-streak" style="display:none;">
+      <p style="font-size:12px; color:#633806; margin-bottom:12px;">Longest unbroken daily streak of 10,000+ steps. One winner takes the prize.</p>
+      <div class="lb-item">
+        <div class="rank" style="font-size:22px;">🥇</div>
+        <div class="avatar av-mint">🌈</div>
+        <div class="lb-info">
+          <div class="lb-name">Marcus K. <span class="badge bdg-sun">Leading!</span></div>
+          <div class="lb-sub">Unbroken since June 1</div>
+        </div>
+        <div class="lb-right"><div class="lb-steps">56 days</div><div class="lb-pct">streak</div></div>
+      </div>
+      <div class="lb-item">
+        <div class="rank">2</div>
+        <div class="avatar av-pink">🦄</div>
+        <div class="lb-info">
+          <div class="lb-name">Sarah R.</div>
+          <div class="lb-sub">Streak broken July 22</div>
+        </div>
+        <div class="lb-right"><div class="lb-steps">51 days</div><div class="lb-pct">streak</div></div>
+      </div>
+      <div class="lb-item">
+        <div class="rank">3</div>
+        <div class="avatar av-lav">🦋</div>
+        <div class="lb-info">
+          <div class="lb-name">Tina L.</div>
+          <div class="lb-sub">Streak broken July 14</div>
+        </div>
+        <div class="lb-right"><div class="lb-steps">43 days</div><div class="lb-pct">streak</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const challenges = { team: false, solo: false, steps: false };
+  const conversions = { walking: 100, cycling: 150, swimming: 200, yoga: 80, kayaking: 120, hiking: 130, steps: 1 };
+  function showSection(n) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('section-' + n).classList.add('active');
+    document.getElementById('nav-' + n).classList.add('active');
+  }
+  function toggleChallenge(n) {
+    challenges[n] = !challenges[n];
+    document.getElementById('c-' + n).classList.toggle('selected', challenges[n]);
+  }
+  function switchTab(n) {
+    ['individual','team','streak'].forEach(t => {
+      document.getElementById('lb-' + t).style.display = t === n ? 'block' : 'none';
+      document.getElementById('tab-' + t).classList.toggle('active', t === n);
+    });
+  }
+  document.getElementById('log-activity').addEventListener('change', updateConv);
+  document.getElementById('log-amount').addEventListener('input', updateConv);
+  function updateConv() {
+    const act = document.getElementById('log-activity').value;
+    const amt = parseFloat(document.getElementById('log-amount').value);
+    const el = document.getElementById('converted-steps');
+    if (!amt) { el.textContent = ''; return; }
+    if (act === 'steps') { el.textContent = amt.toLocaleString() + ' steps — logged directly'; return; }
+    el.textContent = '≈ ' + Math.round(amt * conversions[act]).toLocaleString() + ' steps after conversion';
+  }
+  async function register() {
+    const name = document.getElementById('reg-name').value.trim();
+    const team = document.getElementById('reg-team').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+
+    if (!name) {
+      alert('Please enter your name!');
+      return;
+    }
+
+    const selectedChallenges = Object.keys(challenges)
+      .filter(k => challenges[k]);
+
+    try {
+
+      await window.registerParticipant({
+        name,
+        team,
+        email,
+        challenges: selectedChallenges,
+        createdAt: Date.now()
+      });
+
+      document.getElementById('reg-success')
+        .classList.add('show');
+
+      confetti(35);
+
+      setTimeout(() =>
+        document.getElementById('reg-success')
+          .classList.remove('show'), 6000);
+
+    } catch(err) {
+      console.error(err);
+      alert('Error saving registration');
+    }
+  }
+  async function logSteps() {
+    const name = document.getElementById('log-name').value.trim();
+    const amt = parseFloat(document.getElementById('log-amount').value);
+    const act = document.getElementById('log-activity').value;
+    const date = document.getElementById('log-date').value;
+
+    if (!name || !amt) {
+      alert('Please fill in your name and amount!');
+      return;
+    }
+
+    const steps = act === 'steps'
+      ? Math.round(amt)
+      : Math.round(amt * conversions[act]);
+
+    try {
+
+      await window.saveActivity({
+        name,
+        activity: act,
+        amount: amt,
+        steps,
+        date,
+        createdAt: Date.now()
+      });
+
+      document.getElementById('log-success-msg')
+        .textContent = steps.toLocaleString() + ' steps added!';
+
+      const msgs = [
+        'Keep it up! 🌈',
+        'You\'re crushing it! 🔥',
+        'Every step counts! ✨',
+        'Amazing work! 🦄'
+      ];
+
+      document.getElementById('log-success-sub')
+        .textContent = msgs[Math.floor(Math.random() * msgs.length)];
+
+      document.getElementById('log-success')
+        .classList.add('show');
+
+      confetti(16);
+
+      setTimeout(() =>
+        document.getElementById('log-success')
+          .classList.remove('show'), 5000);
+
+    } catch(err) {
+      console.error(err);
+      alert('Error saving activity');
+    }
+  }
+  function confetti(n) {
+    const wrap = document.getElementById('confetti-wrap');
+    const cols = ['#FAC775','#ED93B1','#5DCAA5','#85B7EB','#AFA9EC','#97C459','#F97316'];
+    wrap.innerHTML = '';
+    for (let i = 0; i < n; i++) {
+      const el = document.createElement('div');
+      el.className = 'cp';
+      el.style.left = Math.random() * 100 + '%';
+      el.style.background = cols[Math.floor(Math.random() * cols.length)];
+      el.style.animationDelay = Math.random() * 1.5 + 's';
+      el.style.animationDuration = (2 + Math.random() * 2) + 's';
+      wrap.appendChild(el);
+    }
+    setTimeout(() => wrap.innerHTML = '', 5500);
+  }
+  document.getElementById('log-date').value = new Date().toISOString().split('T')[0];
+</script>
+
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  onSnapshot,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCOGXpBFCgZDfsnc7zM2QciiuPa6DZNo4E",
+  authDomain: "summerchallenge-228fc.firebaseapp.com",
+  projectId: "summerchallenge-228fc",
+  storageBucket: "summerchallenge-228fc.firebasestorage.app",
+  messagingSenderId: "306454152926",
+  appId: "1:306454152926:web:8930c938312668c81aa44f",
+  measurementId: "G-BJ46RCNYPM"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.db = db;
+
+window.firebaseFns = {
+  collection,
+  addDoc,
+  onSnapshot,
+  query,
+  orderBy
+};
+
+async function registerParticipant(data) {
+  return await addDoc(collection(db, 'participants'), data);
+}
+
+async function saveActivity(data) {
+  return await addDoc(collection(db, 'activities'), data);
+}
+
+window.registerParticipant = registerParticipant;
+window.saveActivity = saveActivity;
+
+const leaderboardQuery = query(
+  collection(db, 'activities'),
+  orderBy('createdAt', 'desc')
+);
+
+onSnapshot(leaderboardQuery, (snapshot) => {
+
+  const totals = {};
+
+  snapshot.forEach((doc) => {
+    const data = doc.data();
+
+    if (!totals[data.name]) {
+      totals[data.name] = 0;
+    }
+
+    totals[data.name] += data.steps || 0;
+  });
+
+  const sorted = Object.entries(totals)
+    .sort((a,b) => b[1] - a[1])
+    .slice(0, 10);
+
+  const container = document.getElementById('lb-individual');
+
+  if (!container) return;
+
+  if (sorted.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center; padding:2rem;">
+        <div style="font-size:48px; margin-bottom:8px;">🐣</div>
+        <p style="font-size:14px; color:#633806;">
+          Be the first to log some summer steps!
+        </p>
+      </div>
+    `;
+    return;
+  }
+
+  const emojis = ['🥇','🥈','🥉','✨','🌟','💫','🎉','🌈','☀️','🦄'];
+
+  container.innerHTML = '';
+
+  sorted.forEach((item, index) => {
+
+    const medal = emojis[index] || '✨';
+
+    container.innerHTML += `
+      <div class="lb-item">
+        <div class="rank">${medal}</div>
+
+        <div class="avatar av-pink">
+          ${item[0].charAt(0).toUpperCase()}
+        </div>
+
+        <div class="lb-info">
+          <div class="lb-name">${item[0]}</div>
+          <div class="lb-sub">Live participant</div>
+          <div class="pb-wrap">
+            <div class="pb-fill pb-pink"
+              style="width:${Math.min(100, 30 + index * 8)}%">
+            </div>
+          </div>
+        </div>
+
+        <div class="lb-right">
+          <div class="lb-steps">
+            ${item[1].toLocaleString()}
+          </div>
+          <div class="lb-pct">steps</div>
+        </div>
+      </div>
+    `;
+  });
+});
+</script>
+
